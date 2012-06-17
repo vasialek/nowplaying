@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stations>
+  <station>
+    <isactive>true</isactive>
+    <title>M-1 plus</title>
+    <url>http://pliusas.fm/xml/onair.xml?%RANDOM%</url>
+    <beforetitle></beforetitle>
+    <titlemask><![CDATA[(\<title\>)([^<]+)]]></titlemask>
+    <titleposition>2</titleposition>
+    <artistemask><![CDATA[(\<artist\>)([^<]+)]]></artistemask>
+    <artistposition>2</artistposition>
+  </station>
+  <station>
+    <title>Radio ROKS</title>
+    <isactive>true</isactive>
+    <url>http://www.radioroks.com.ua/digiton/index/inline</url>
+    <beforetitle></beforetitle>
+    <titlemask><![CDATA[(\<strong\>\<a href=")([^>]+)([^<]+)([^-]+)([\ \-]+)([^<]+)]]></titlemask>
+    <titleposition>6</titleposition>
+    <artistemask><![CDATA[(\<strong\>\<a href=")([^>]+)([^<]+)([^-]+)([\ \-]+)([^<]+)]]></artistemask>
+    <artistposition>3</artistposition>
+  </station>
+  <station>
+    <title>Classic Rock FM</title>
+    <isactive>true</isactive>
+    <url>http://rock.lt/in/dg_html.php</url>
+    <beforetitle><![CDATA[<body]]></beforetitle>
+    <titlemask><![CDATA[(-\ )([^<]+)]]></titlemask>
+    <titleposition>2</titleposition>
+    <artistemask><![CDATA[(>)([^-]+)]]></artistemask>
+    <artistposition>2</artistposition>
+  </station>
+  <station>
+    <isactive>true</isactive>
+    <title>European Hit Radio</title>
+    <url>http://ehr.lt/sites/all/themes/ehr/responce_site_player.php?_=%RANDOM%</url>
+    <beforetitle></beforetitle>
+    <titlemask><![CDATA[(song-title" title=")([^"]+)]]></titlemask>
+    <titleposition>2</titleposition>
+    <artistemask><![CDATA[(song-artist" title=")([^"]+)]]></artistemask>
+    <artistposition>2</artistposition>
+  </station>
+  <station>
+    <isactive>true</isactive>
+    <title>Geras FM</title>
+    <url><![CDATA[http://marci261.getmarci.com/ajaxRequester.php?_=%RANDOM%&s=marci261]]></url>
+    <beforetitle></beforetitle>
+    <artistemask><![CDATA[([^-]+)(-)(.*)$]]></artistemask>
+    <artistposition>1</artistposition>
+    <titlemask><![CDATA[([^-]+)(-)(.*)$]]></titlemask>
+    <titleposition>3</titleposition>
+  </station>
+</stations>
