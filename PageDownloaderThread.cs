@@ -74,39 +74,41 @@ namespace NowPlaying
                 Log4cs.Log("Got {0} radio stations to proceed...", _arRadios.Length);
             }
 
+            // Which station to proceed
+            int currentStation = 0;
             while( _isRunning )
             {
                 try
                 {
-                    for(int i = 0; i < _arRadios.Length; i++)
+                    if( currentStation >= _arRadios.Length )
                     {
-                        Log4cs.Log("Downloading {0}...", _arRadios[i].Url);
-                        try
-                        {
-                            _arRadios[i].RawStationResponse = wc.DownloadString(_arRadios[i].Url);
-                            _arRadios[i].LastCheckedAt = DateTime.Now;
-                            Song song = GetSongTitle.Parse(_arRadios[i]);
-                            if(song != null)
-                            {
-                                // Set station where song was played
-                                song.Radio = _arRadios[i];
-
-                                // Check if we need to notify about new song
-                                if(SongParsed != null)
-                                {
-                                    SongParsed(_arRadios[i], song);
-                                }
-                            }
-
-                        } catch(Exception ex)
-                        {
-                            Log4cs.Log(Importance.Error, "Error downloading song from {0}!", _arRadios[i].Url);
-                            Log4cs.Log(Importance.Debug, ex.ToString());
-                        }
+                        currentStation = 0;
                     }
+                    Log4cs.Log(Importance.Debug, "Downloading station #{0} from {1}...", currentStation, _arRadios[currentStation].Url);
+                    //try
+                    //{
+                    _arRadios[currentStation].RawStationResponse = wc.DownloadString(_arRadios[currentStation].Url);
+                    _arRadios[currentStation].LastCheckedAt = DateTime.Now;
+                    Song song = GetSongTitle.Parse(_arRadios[currentStation]);
+                        if(song != null)
+                        {
+                            // Set station where song was played
+                            song.Radio = _arRadios[currentStation];
 
-                    // Everything goes ok
-                    errors = 0;
+                            // Check if we need to notify about new song
+                            if(SongParsed != null)
+                            {
+                                SongParsed(_arRadios[currentStation], song);
+                            }
+                        }
+
+                    //} catch(Exception ex)
+                    //{
+                    //    Log4cs.Log(Importance.Error, "Error downloading song from {0}!", _arRadios[i].Url);
+                    //    Log4cs.Log(Importance.Debug, ex.ToString());
+                    //}
+                // Everything goes ok
+                errors = 0;
 
                 } catch(Exception ex)
                 {
@@ -133,17 +135,23 @@ namespace NowPlaying
                     }
                 } finally
                 {
-                    // Wait for exit signal or timeout
-                    switch(Common.WaitMyEvents(ref AEvents.arEvents, arEventsToWait, 30000, true))
+                    // Wait for exit signal or timeout if all radios are fetched
+                    if( currentStation == _arRadios.Length - 1 )
                     {
-                        //case (int)AEvents.EventsId.GotData:
-                        //    Log4cs.Log(Importance.Debug, "Got data from radio station");
-                        //    break;
-                        case (int)AEvents.EventsId.Quit:
-                            Log4cs.Log("Got signal to stop, exiting downloder thread...");
-                            _isRunning = false;
-                            break;
+                        switch(Common.WaitMyEvents(ref AEvents.arEvents, arEventsToWait, 30000, true))
+                        {
+                            //case (int)AEvents.EventsId.GotData:
+                            //    Log4cs.Log(Importance.Debug, "Got data from radio station");
+                            //    break;
+                            case (int)AEvents.EventsId.Quit:
+                                Log4cs.Log("Got signal to stop, exiting downloder thread...");
+                                _isRunning = false;
+                                break;
+                        }
                     }
+
+                    // Go to next station anyway
+                    currentStation++;
 
                 }
             }  // END WHILE ( continue download )

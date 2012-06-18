@@ -35,6 +35,12 @@ namespace NowPlaying
         /// <param name="song"></param>
         public bool Add(Song song)
         {
+            // Skip if both artist and title are empty (some kind of parsing error)
+            if( song == null || (string.IsNullOrEmpty(song.Artist) && string.IsNullOrEmpty(song.Title)) )
+            {
+                return false;
+            }
+
             Song lastSong = GetLast(song.Radio.RadioName);
             if((lastSong == null) || !lastSong.Artist.Equals(song.Artist) || !lastSong.Title.Equals(song.Title))
             {

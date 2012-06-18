@@ -13,7 +13,7 @@ namespace NowPlaying
 
         #region " Name / Version "
         public static string Name = "iNowPlaying";
-        public static string Version = "0.7.11";
+        public static string Version = "0.7.14";
         public static string NameVersion
         {
             get { return string.Format("{0} (v{1})", Name, Version); }
